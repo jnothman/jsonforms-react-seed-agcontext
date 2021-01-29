@@ -1,6 +1,8 @@
 import { Fragment, useState, useEffect } from 'react';
-import { JsonForms } from '@jsonforms/react';
+import { JsonForms, JsonFormsDispatch } from '@jsonforms/react';
+import { rankWith, isControl } from '@jsonforms/core';
 import Grid from '@material-ui/core/Grid';
+import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import logo from './logo.svg';
@@ -14,6 +16,7 @@ import {
 import RatingControl from './RatingControl';
 import ratingControlTester from './ratingControlTester';
 import { makeStyles } from '@material-ui/core/styles';
+import pointer from 'json-pointer';
 
 const useStyles = makeStyles((_theme) => ({
   container: {
@@ -49,10 +52,29 @@ const initialData = {
   rating: 3,
 };
 
+
+const TooltipControl = (props: any) => {
+  // Get the description from the JSONSchema...
+  // XXX: there must be a neater way to derive this from the uischema scope!
+  var scopeSchema;
+  try {
+    scopeSchema = pointer.get(props.schema, props.uischema.scope.substring(1))
+  } catch (error) {
+  }
+  return(
+<div>
+  <JsonFormsDispatch
+    {...props}
+    renderers={materialRenderers}
+  />
+  <Tooltip title={scopeSchema?.description}><div style={{float: "right", width: "2em"}}>?</div></Tooltip>
+</div>)};
+
 const renderers = [
   ...materialRenderers,
   //register custom renderers
   { tester: ratingControlTester, renderer: RatingControl },
+  // { tester: rankWith(Number.MAX_VALUE, isControl), renderer: TooltipControl },
 ];
 
 const App = () => {
