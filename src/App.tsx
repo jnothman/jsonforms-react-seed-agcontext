@@ -13,8 +13,8 @@ import {
   materialCells,
   materialRenderers,
 } from '@jsonforms/material-renderers';
-import RatingControl from './RatingControl';
-import ratingControlTester from './ratingControlTester';
+import GrowthStageControl from './GrowthStageControl';
+import growthStageControlTester from './growthStageControlTester';
 import { makeStyles } from '@material-ui/core/styles';
 import pointer from 'json-pointer';
 
@@ -44,13 +44,7 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-const initialData = {
-  name: 'Send email to Adrian',
-  description: 'Confirm if you have passed the subject\nHereby ...',
-  done: true,
-  recurrence: 'Daily',
-  rating: 3,
-};
+const initialData = {};
 
 
 const TooltipControl = (props: any) => {
@@ -73,7 +67,7 @@ const TooltipControl = (props: any) => {
 const renderers = [
   ...materialRenderers,
   //register custom renderers
-  { tester: ratingControlTester, renderer: RatingControl },
+  { tester: growthStageControlTester, renderer: GrowthStageControl },
   // { tester: rankWith(Number.MAX_VALUE, isControl), renderer: TooltipControl },
 ];
 
